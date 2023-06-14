@@ -13,7 +13,30 @@ export const api = createApi({
 		getProductByid: builder.query({
 			query: (id) => `products/${id}`,
 		}),
+
+		// orders
+		createOrder: builder.mutation({
+			query: (newOrder) => ({
+				url: "orders",
+				method: "POST",
+				body: newOrder,
+			}),
+		}),
+
+		getOrders: builder.query({
+			query: () => `orders`,
+		}),
+
+		getOrder: builder.query({
+			query: (ref) => `orders/${ref}`,
+		}),
 	}),
 });
 
-export const { useGetProductsQuery, useGetProductByidQuery } = api;
+export const {
+	useGetProductsQuery,
+	useGetProductByidQuery,
+	useCreateOrderMutation,
+	useGetOrderQuery,
+	useGetOrdersQuery,
+} = api;

@@ -1,4 +1,5 @@
 import {
+	Alert,
 	FlatList,
 	StyleSheet,
 	Text,
@@ -7,12 +8,14 @@ import {
 } from "react-native";
 import React from "react";
 import CartItemCard from "../components/CartItemCard";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+	clearCart,
 	selectDeliveryPrice,
 	selectSubtotal,
 	selectTotal,
 } from "../redux/slices/cartSlice";
+import { useCreateOrderMutation } from "../redux/api/apiSlice";
 
 const FooterCartTotal = () => {
 	const subtotal = useSelector(selectSubtotal);
@@ -51,6 +54,34 @@ const FooterCartTotal = () => {
 
 const ShoppingCartScreen = () => {
 	const cartItems = useSelector((state) => state.cart.items);
+	const subtotal = useSelector(selectSubtotal);
+	const total = useSelector(selectTotal);
+	const deliveryFee = useSelector(selectDeliveryPrice);
+
+	const dispatch = useDispatch();
+	const [createOrder] = useCreateOrderMutation();
+
+	const handleCreateOrder = async () => {
+		const result = await createOrder({
+			items: cartItems,
+			subtotal,
+			deliveryFee,
+			total,
+			customer: {
+				name: "rizky",
+				address: "Indonesia",
+				email: "rizky@office.com",
+			},
+		});
+
+		if (result.data?.status === "OK") {
+			Alert.alert(
+				"Order has been submitted",
+				`Your order reference is: ${result.data.data.ref}`
+			);
+			dispatch(clearCart());
+		}
+	};
 
 	return (
 		<View style={{ position: "relative" }}>
@@ -63,6 +94,7 @@ const ShoppingCartScreen = () => {
 					/>
 
 					<TouchableOpacity
+						onPress={handleCreateOrder}
 						activeOpacity={0.8}
 						style={{
 							backgroundColor: "black",
