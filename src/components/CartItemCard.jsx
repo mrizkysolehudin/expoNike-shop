@@ -18,7 +18,7 @@ const CartItemCard = ({ item }) => {
 	return (
 		<View style={{ flexDirection: "row", margin: 10 }}>
 			<Image
-				src={item?.image}
+				src={item?.product?.image}
 				style={{ width: 160, height: 160, marginRight: 10 }}
 			/>
 
@@ -28,8 +28,10 @@ const CartItemCard = ({ item }) => {
 					justifyContent: "space-between",
 				}}>
 				<View>
-					<Text style={{ fontWeight: 700, fontSize: 20 }}>{item?.name}</Text>
-					<Text>Size: {item?.sizes[0]}</Text>
+					<Text style={{ fontWeight: 700, fontSize: 20 }}>
+						{item?.product?.name}
+					</Text>
+					<Text>Size: {item?.product?.sizes[0]}</Text>
 				</View>
 
 				<View
@@ -44,7 +46,9 @@ const CartItemCard = ({ item }) => {
 							alignItems: "center",
 						}}>
 						<Feather onPress={handlePlus} name="plus-circle" size={22} color="gray" />
-						<Text style={{ marginHorizontal: 6, fontSize: 16 }}>{count}</Text>
+						<Text style={{ marginHorizontal: 6, fontSize: 16 }}>
+							{item?.quantity}
+						</Text>
 						<Feather
 							onPress={handleMinus}
 							name="minus-circle"
@@ -52,7 +56,9 @@ const CartItemCard = ({ item }) => {
 							color="gray"
 						/>
 					</View>
-					<Text style={{ fontWeight: "700", fontSize: 16 }}>${item?.price}</Text>
+					<Text style={{ fontWeight: "700", fontSize: 16 }}>
+						${item?.product?.price}
+					</Text>
 				</View>
 			</View>
 		</View>

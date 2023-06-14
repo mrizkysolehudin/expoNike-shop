@@ -6,7 +6,6 @@ import {
 	View,
 } from "react-native";
 import React from "react";
-import { productsData } from "../dataDummy/productsData";
 import CartItemCard from "../components/CartItemCard";
 import { useSelector } from "react-redux";
 
@@ -48,7 +47,7 @@ const ShoppingCartScreen = () => {
 		<View style={{ position: "relative" }}>
 			<FlatList
 				data={cartItems}
-				renderItem={({ item }) => <CartItemCard item={item.product} />}
+				renderItem={({ item }) => <CartItemCard item={item} />}
 				ListFooterComponent={FooterCartTotal}
 			/>
 
