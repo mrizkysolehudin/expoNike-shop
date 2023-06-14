@@ -7,16 +7,18 @@ import {
 	View,
 } from "react-native";
 import React from "react";
-import { productsData } from "../dataDummy/productsData";
+import { useGetProductsQuery } from "../redux/api/apiSlice";
 
 const ProductsScreen = ({ navigation }) => {
+	const { data } = useGetProductsQuery();
+
 	return (
 		<FlatList
-			data={productsData}
+			data={data?.data}
 			renderItem={({ item }) => (
 				<Pressable
 					onPress={() => {
-						navigation.navigate("Product Details", { id: item.id });
+						navigation.navigate("Product Details", { _id: item._id });
 					}}
 					style={styles.productCard}>
 					<Image src={item.image} style={styles.imageProduct} />
@@ -26,9 +28,7 @@ const ProductsScreen = ({ navigation }) => {
 							justifyContent: "space-between",
 							paddingHorizontal: 9,
 						}}>
-						<Text style={{ fontWeight: 700, fontSize: 17 }}>
-							{item.name}
-						</Text>
+						<Text style={{ fontWeight: 700, fontSize: 17 }}>{item.name}</Text>
 						<Text
 							style={{
 								fontWeight: 700,
