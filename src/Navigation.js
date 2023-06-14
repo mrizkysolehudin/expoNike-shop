@@ -1,4 +1,4 @@
-import { Text, Pressable, View } from "react-native";
+import { Text, Pressable } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
