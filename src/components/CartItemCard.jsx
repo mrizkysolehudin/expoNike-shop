@@ -1,18 +1,28 @@
 import { View, Text, Image } from "react-native";
 import React, { useState } from "react";
 import { Feather } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { changeQuantity } from "../redux/slices/cartSlice";
 
 const CartItemCard = ({ item }) => {
-	const [count, setCount] = useState(0);
+	const dispatch = useDispatch();
 
 	const handlePlus = () => {
-		setCount(count + 1);
+		dispatch(
+			changeQuantity({
+				productId: item?.product?._id,
+				amount: 1,
+			})
+		);
 	};
 
 	const handleMinus = () => {
-		if (count > 0) {
-			setCount(count - 1);
-		}
+		dispatch(
+			changeQuantity({
+				productId: item?.product?._id,
+				amount: -1,
+			})
+		);
 	};
 
 	return (
