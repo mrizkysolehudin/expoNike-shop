@@ -2,12 +2,21 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Button from "../components/Button";
 import { useGetProductByidQuery } from "../redux/api/apiSlice";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/slices/cartSlice";
 
-const ProductDetailsScreen = ({ route }) => {
+const ProductDetailsScreen = ({ route, navigation }) => {
 	const { _id } = route.params;
 	const { data } = useGetProductByidQuery(_id);
 
 	const item = data?.data;
+
+	const dispatch = useDispatch();
+
+	const handleAddToCart = () => {
+		dispatch(addToCart({ product: item }));
+		navigation.navigate("Shopping Cart");
+	};
 
 	return (
 		<View>
@@ -20,7 +29,7 @@ const ProductDetailsScreen = ({ route }) => {
 				</Text>
 			</View>
 
-			<Button text="Add to cart" />
+			<Button onPress={handleAddToCart} text="Add to cart" />
 		</View>
 	);
 };

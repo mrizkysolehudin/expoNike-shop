@@ -1,5 +1,4 @@
 import {
-	Dimensions,
 	FlatList,
 	StyleSheet,
 	Text,
@@ -9,6 +8,7 @@ import {
 import React from "react";
 import { productsData } from "../dataDummy/productsData";
 import CartItemCard from "../components/CartItemCard";
+import { useSelector } from "react-redux";
 
 const FooterCartTotal = () => {
 	return (
@@ -42,11 +42,13 @@ const FooterCartTotal = () => {
 };
 
 const ShoppingCartScreen = () => {
+	const cartItems = useSelector((state) => state.cart.items);
+
 	return (
 		<View style={{ position: "relative" }}>
 			<FlatList
-				data={productsData.slice(0, 10)}
-				renderItem={({ item }) => <CartItemCard item={item} />}
+				data={cartItems}
+				renderItem={({ item }) => <CartItemCard item={item.product} />}
 				ListFooterComponent={FooterCartTotal}
 			/>
 
