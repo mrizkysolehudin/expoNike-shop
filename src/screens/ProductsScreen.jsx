@@ -1,4 +1,5 @@
 import {
+	ActivityIndicator,
 	FlatList,
 	Image,
 	Pressable,
@@ -10,7 +11,11 @@ import React from "react";
 import { useGetProductsQuery } from "../redux/api/apiSlice";
 
 const ProductsScreen = ({ navigation }) => {
-	const { data } = useGetProductsQuery();
+	const { data, isLoading, error } = useGetProductsQuery();
+
+	if (isLoading) return <ActivityIndicator />;
+
+	if (error) return <Text>Error fetching the product. {error.error}</Text>;
 
 	return (
 		<FlatList

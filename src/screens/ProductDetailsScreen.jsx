@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import Button from "../components/Button";
 import { useGetProductByidQuery } from "../redux/api/apiSlice";
@@ -7,7 +7,7 @@ import { addToCart } from "../redux/slices/cartSlice";
 
 const ProductDetailsScreen = ({ route, navigation }) => {
 	const { _id } = route.params;
-	const { data } = useGetProductByidQuery(_id);
+	const { data, isLoading, error } = useGetProductByidQuery(_id);
 
 	const item = data?.data;
 
@@ -17,6 +17,10 @@ const ProductDetailsScreen = ({ route, navigation }) => {
 		dispatch(addToCart({ product: item }));
 		navigation.navigate("Shopping Cart");
 	};
+
+	if (isLoading) return <ActivityIndicator />;
+
+	if (error) return <Text>Error fetching the product. {error.error}</Text>;
 
 	return (
 		<View>
