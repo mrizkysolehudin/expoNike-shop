@@ -17,9 +17,6 @@ const TrackOrderScreen = () => {
 		error: errorRef,
 	} = useGetOrderQuery(ref);
 
-	const customer = dataRef?.data?.customer;
-	const items = dataRef?.data;
-
 	const { data, isLoading, error } = useGetOrdersQuery();
 
 	return (
@@ -39,10 +36,12 @@ const TrackOrderScreen = () => {
 
 			{isLoadingRef && <ActivityIndicator />}
 			{errorRef && <Text>Order not found</Text>}
-			{dataRef?.status === "OK" && (
+			{dataRef?.status === "OK" && dataRef?.data?.items?.[0]?.product?.name && (
 				<View>
-					<Text>{JSON.stringify(customer, null, 2)}</Text>
-					<Text>{JSON.stringify(items)}</Text>
+					<Text>
+						Order: {JSON.stringify(dataRef?.data?.items[0]?.product?.name)}
+					</Text>
+					<Text>{JSON.stringify(dataRef?.data?.customer, null, 2)}</Text>
 				</View>
 			)}
 
@@ -53,8 +52,8 @@ const TrackOrderScreen = () => {
 				<View>
 					<Text style={{ marginBottom: 6, fontWeight: 600 }}>All orders</Text>
 					{data?.data?.map((item, index) => (
-						<View style={{ marginTop: 3 }}>
-							<Text key={index} style={{ color: "gray" }}>
+						<View key={index} style={{ marginTop: 3 }}>
+							<Text style={{ color: "gray" }}>
 								{" "}
 								order ke-{index + 1}:{" "}
 								<Text style={{ color: "red" }}>

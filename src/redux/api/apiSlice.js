@@ -23,12 +23,12 @@ export const api = createApi({
 			}),
 		}),
 
-		getOrders: builder.query({
-			query: () => `orders`,
-		}),
-
 		getOrder: builder.query({
 			query: (ref) => `orders/${ref}`,
+		}),
+
+		getOrders: builder.query({
+			query: () => `orders`,
 		}),
 	}),
 });
