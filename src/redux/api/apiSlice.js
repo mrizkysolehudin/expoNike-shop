@@ -30,6 +30,15 @@ export const api = createApi({
 		getOrders: builder.query({
 			query: () => `orders`,
 		}),
+
+		// payment
+		createPaymentIntent: builder.mutation({
+			query: (data) => ({
+				url: "payments/intents",
+				method: "POST",
+				body: data,
+			}),
+		}),
 	}),
 });
 
@@ -39,4 +48,5 @@ export const {
 	useCreateOrderMutation,
 	useGetOrderQuery,
 	useGetOrdersQuery,
+	useCreatePaymentIntentMutation,
 } = api;

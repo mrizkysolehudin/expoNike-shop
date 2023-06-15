@@ -1,4 +1,5 @@
 import {
+	ActivityIndicator,
 	Alert,
 	FlatList,
 	StyleSheet,
@@ -15,7 +16,11 @@ import {
 	selectSubtotal,
 	selectTotal,
 } from "../redux/slices/cartSlice";
-import { useCreateOrderMutation } from "../redux/api/apiSlice";
+import {
+	useCreateOrderMutation,
+	useCreatePaymentIntentMutation,
+} from "../redux/api/apiSlice";
+import { useStripe } from "@stripe/stripe-react-native";
 
 const FooterCartTotal = () => {
 	const subtotal = useSelector(selectSubtotal);
@@ -59,7 +64,43 @@ const ShoppingCartScreen = () => {
 	const deliveryFee = useSelector(selectDeliveryPrice);
 
 	const dispatch = useDispatch();
-	const [createOrder] = useCreateOrderMutation();
+	const [createOrder, { isLoading }] = useCreateOrderMutation();
+
+	const [createPaymentIntent] = useCreatePaymentIntentMutation();
+	const { initPaymentSheet, presentPaymentSheet } = useStripe();
+
+	const handleCheckout = async () => {
+		const res = await createPaymentIntent({
+			amount: Math.floor(total * 100),
+		});
+		if (res.error) {
+			console.log(res.error);
+			Alert.alert("Error create payment");
+			return;
+		}
+
+		const initResponse = await initPaymentSheet({
+			merchantDisplayName: "rizky@office",
+			paymentIntentClientSecret: res.data.paymentIntent,
+		});
+		if (initResponse.error) {
+			console.log(initResponse.error);
+			Alert.alert("Error initialize payment sheet");
+			return;
+		}
+
+		const paymentResponse = await presentPaymentSheet();
+		if (paymentResponse.error) {
+			console.log(paymentResponse.error);
+			Alert.alert(
+				`Error code: ${paymentResponse.error.code}. Error message: ${paymentResponse.error.message}`
+			);
+			return;
+		}
+
+		// if payment success
+		handleCreateOrder();
+	};
 
 	const handleCreateOrder = async () => {
 		const result = await createOrder({
@@ -94,7 +135,7 @@ const ShoppingCartScreen = () => {
 					/>
 
 					<TouchableOpacity
-						onPress={handleCreateOrder}
+						onPress={handleCheckout}
 						activeOpacity={0.8}
 						style={{
 							backgroundColor: "black",
@@ -110,6 +151,7 @@ const ShoppingCartScreen = () => {
 						}}>
 						<Text style={{ color: "white", fontSize: 19, fontWeight: 700 }}>
 							checkout
+							{isLoading && <ActivityIndicator />}
 						</Text>
 					</TouchableOpacity>
 				</>

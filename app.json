@@ -1,5 +1,8 @@
 {
 	"expo": {
+		"extra": {
+			"STRIPE_API_KEYS_TOKEN": "pk_test_51MFD2UFW1Zd3sPk1LGYyVovqKujO36yL9KjlX93cIz0hzasD7CkBAt8xG5Ifb1as0EeuvV7D0DeAweTB4DBzqxHP00ajXnsnto"
+		},
 		"name": "frontend",
 		"slug": "frontend",
 		"version": "1.0.0",
