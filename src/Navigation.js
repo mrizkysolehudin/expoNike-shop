@@ -7,10 +7,13 @@ import ProductDetailsScreen from "./screens/ProductDetailsScreen";
 import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 import TrackOrderScreen from "./screens/TrackOrderScreen";
 import ShoppingCartScreen from "./screens/ShoppingCartScreen";
+import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
+	const cartItems = useSelector((state) => state.cart.items);
+
 	return (
 		<NavigationContainer>
 			<Stack.Navigator
@@ -23,9 +26,7 @@ const Navigation = () => {
 					options={({ navigation }) => ({
 						headerLeft: () => (
 							<MaterialCommunityIcons
-								onPress={() =>
-									navigation.navigate("Track Order")
-								}
+								onPress={() => navigation.navigate("Track Order")}
 								name="truck-delivery"
 								size={23}
 								color="gray"
@@ -34,9 +35,7 @@ const Navigation = () => {
 						),
 						headerRight: () => (
 							<Pressable
-								onPress={() =>
-									navigation.navigate("Shopping Cart")
-								}
+								onPress={() => navigation.navigate("Shopping Cart")}
 								style={{ flexDirection: "row" }}>
 								<FontAwesome5
 									name="shopping-cart"
@@ -51,7 +50,7 @@ const Navigation = () => {
 										fontSize: 16,
 										marginLeft: 4,
 									}}>
-									1
+									{cartItems?.length}
 								</Text>
 							</Pressable>
 						),
@@ -62,10 +61,7 @@ const Navigation = () => {
 					component={ProductDetailsScreen}
 					options={{ presentation: "modal" }}
 				/>
-				<Stack.Screen
-					name="Shopping Cart"
-					component={ShoppingCartScreen}
-				/>
+				<Stack.Screen name="Shopping Cart" component={ShoppingCartScreen} />
 				<Stack.Screen name="Track Order" component={TrackOrderScreen} />
 			</Stack.Navigator>
 		</NavigationContainer>
